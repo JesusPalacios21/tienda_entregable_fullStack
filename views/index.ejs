@@ -1,0 +1,36 @@
+<%- include('./partials/header') %>
+<main role="main" class="container py-5">
+  <div class="text-center">
+    <h1 class="display-4 mb-4">¡Bienvenido a la Tienda Virtual!</h1>
+    <p class="lead">Aquí puedes gestionar tus productos de manera fácil y rápida.</p>
+
+    <!-- Tarjetas con opciones -->
+    <div class="row justify-content-center mt-5">
+      <!-- Registrar Producto -->
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <img src="/img/registrar_electro.jpg" class="card-img-top" alt="Registrar producto">
+          <div class="card-body text-center">
+            <h5 class="card-title">Registrar Producto</h5>
+            <p class="card-text">Añadir nuevos productos a la tienda virtual.</p>
+            <a href="/create" class="btn btn-primary">Registrar Producto</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Listar Productos -->
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <img src="/img/listar_electro.jpg" class="card-img-top" alt="Listar productos">
+          <div class="card-body text-center">
+            <h5 class="card-title">Listar Productos</h5>
+            <p class="card-text">Visualizar todos los productos añadidos a la tienda.</p>
+            <a href="/listar" class="btn btn-success">Ver Productos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+</main>
+
+<%- include('./partials/footer') %>
