@@ -54,7 +54,10 @@
       <label for="idcategoria" class="form-label">Categoría</label>
       <select class="form-control" id="idcategoria" name="idcategoria" required>
         <option value="">Selecciona una categoría</option>
-      </select>
+        <% categorias.forEach(cat => { %>
+          <option value="<%= cat.idcategoria %>"><%= cat.nombre %></option>
+        <% }) %>
+      </select>      
     </div>
 
     <div class="mb-3">
