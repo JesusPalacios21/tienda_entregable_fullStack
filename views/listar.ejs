@@ -3,22 +3,24 @@
 <main class="container py-5">
   <h1 class="text-center mb-5 text-primary display-4">Listado de Productos</h1>
 
-  <!-- Filtros -->
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <form action="/listar" method="GET">
+  <!-- Filtros combinados -->
+  <form action="/listar" method="GET">
+    <div class="row mb-4">
+      <!-- Filtro por categoría -->
+      <div class="col-md-4">
         <label for="categoria" class="form-label">Categoría</label>
         <select class="form-select" name="categoria" id="categoria" onchange="this.form.submit()">
-            <option value="">Todas las Categorías</option>
-            <% categorias.forEach(cat => { %>
-              <option value="<%= cat.idcategoria %>" <%= cat.idcategoria == categoria ? 'selected' : '' %>><%= cat.nombre %></option>
-            <% }) %>
-          </select>          
-      </form>
-    </div>
+          <option value="">Todas las Categorías</option>
+          <% categorias.forEach(cat => { %>
+            <option value="<%= cat.idcategoria %>" <%= cat.idcategoria == categoria ? 'selected' : '' %>>
+              <%= cat.nombre %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
 
-    <div class="col-md-4">
-      <form action="/listar" method="GET">
+      <!-- Filtro por precio -->
+      <div class="col-md-4">
         <label for="precio" class="form-label">Rango de Precio</label>
         <select class="form-select" name="precio" id="precio" onchange="this.form.submit()">
           <option value="">Seleccionar Rango</option>
@@ -28,16 +30,29 @@
           <option value="201-500" <%= precio === '201-500' ? 'selected' : '' %>>S/ 201 - S/ 500</option>
           <option value="500+" <%= precio === '500+' ? 'selected' : '' %>>S/ 500+</option>
         </select>
-      </form>
-    </div>
+      </div>
 
-    <div class="col-md-4">
-      <form action="/listar" method="GET">
+      <!-- Buscador -->
+      <div class="col-md-4">
         <label for="buscador" class="form-label">Buscar</label>
-        <input type="text" name="buscador" id="buscador" class="form-control" placeholder="Buscar producto..." value="<%= buscador %>" onchange="this.form.submit()">
-      </form>
+        <input
+          type="text"
+          name="buscador"
+          id="buscador"
+          class="form-control"
+          placeholder="Buscar producto..."
+          value="<%= buscador %>"
+          onchange="this.form.submit()"
+        >
+      </div>
     </div>
-  </div>
+    <!-- Botón para limpiar filtros -->
+    <% if (categoria || precio || buscador) { %>
+      <div class="text-end mb-3">
+        <a href="/listar" class="btn btn-secondary btn-sm">Limpiar filtros</a>
+      </div>
+    <% } %>
+  </form>
 
   <!-- Lista de productos -->
   <div class="row g-4">
@@ -45,29 +60,23 @@
       <% productos.forEach(producto => { %>
         <div class="col-lg-3 col-md-4 col-sm-6">
           <div class="card shadow-sm rounded-lg border-0 overflow-hidden">
-            <!-- Imagen -->
             <img src="<%= producto.imagen_url %>" class="card-img-top" alt="<%= producto.nombre %>" style="object-fit: cover; height: 250px;">
             <div class="card-body">
-              <!-- Título del producto -->
               <h5 class="card-title text-dark font-weight-bold text-truncate" style="max-width: 100%;"><%= producto.nombre %></h5>
               <div class="d-flex justify-content-between align-items-center mb-3">
-                <!-- Precio -->
                 <p class="text-primary h5 mb-0"><strong>S/ <%= producto.precio %></strong></p>
-                <!-- Stock -->
                 <p class="text-muted mb-0"><strong>Stock:</strong> <%= producto.stock %></p>
               </div>
-              <!-- Descripción corta -->
               <p class="card-text text-muted" style="font-size: 0.9rem;">
                 <strong>Marca:</strong> <%= producto.marca %><br>
                 <strong>Modelo:</strong> <%= producto.modelo %><br>
                 <strong>Categoría:</strong> <%= producto.categoria %>
               </p>
               <div class="d-flex justify-content-between mt-3">
-                <!-- Botones de acción -->
-                <a href="/producto/actualizar/<%= producto.id %>" class="btn btn-warning btn-sm w-100 me-2 text-white">
+                <a href="/producto/actualizar/<%= producto.idelectrodomestico %>" class="btn btn-warning btn-sm w-100 me-2 text-white">
                   <i class="bi bi-pencil"></i> Actualizar
                 </a>
-                <a href="/producto/eliminar/<%= producto.id %>" class="btn btn-danger btn-sm w-100 ms-2 text-white" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+                <a href="/producto/eliminar/<%= producto.idelectrodomestico %>" class="btn btn-danger btn-sm w-100 ms-2 text-white" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
                   <i class="bi bi-trash"></i> Eliminar
                 </a>
               </div>
@@ -76,7 +85,7 @@
         </div>
       <% }) %>
     <% } else { %>
-      <p class="text-center">No hay productos registrados aún.</p>
+      <p class="text-center">No hay productos registrados con esos criterios.</p>
     <% } %>
   </div>
 </main>

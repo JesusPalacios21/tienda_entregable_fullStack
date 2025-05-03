@@ -104,4 +104,83 @@ router.get('/listar', async (req, res) => {
   });
   
 
+
+  // Mostrar formulario para editar un producto
+  router.get('/producto/actualizar/:id', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const [categorias] = await db.query('SELECT * FROM categorias');
+      const [resultados] = await db.query('SELECT * FROM electrodomesticos WHERE idelectrodomestico = ?', [id]);  // Cambié 'id' por 'idelectrodomestico'
+  
+      if (resultados.length === 0) {
+        return res.status(404).send('Producto no encontrado');
+      }
+  
+      const producto = resultados[0];
+      res.render('edit', { producto, categorias });
+    } catch (error) {
+      console.error('Error al cargar producto para editar:', error);
+      res.status(500).send('Error interno del servidor');
+    }
+  });
+  
+
+// Guardar cambios del producto
+router.post('/producto/actualizar/:id', upload.single('imagen'), async (req, res) => {
+  const { id } = req.params;
+  const {
+    nombre, precio, color, alto, ancho,
+    marca, modelo, descripcion, stock, idcategoria
+  } = req.body;
+
+  let query, params;
+  let imagen_url = null;
+
+  // Si se sube una nueva imagen
+  if (req.file) {
+    imagen_url = '/uploads/' + req.file.filename;
+  } else {
+    // Si no se sube una nueva imagen, mantenemos la imagen actual
+    const [productoActual] = await db.query('SELECT imagen_url FROM electrodomesticos WHERE idelectrodomestico = ?', [id]);
+    imagen_url = productoActual[0]?.imagen_url || '';  // Si no existe, asignamos un valor vacío
+  }
+
+  query = `
+    UPDATE electrodomesticos SET
+      nombre = ?, precio = ?, color = ?, alto = ?, ancho = ?,
+      marca = ?, modelo = ?, descripcion = ?, stock = ?, imagen_url = ?, idcategoria = ?
+    WHERE idelectrodomestico = ?
+  `;
+
+  params = [nombre, precio, color, alto, ancho, marca, modelo, descripcion, stock, imagen_url, idcategoria, id];
+
+  try {
+    await db.query(query, params);
+    res.redirect('/listar');
+  } catch (error) {
+    console.error('Error al actualizar el producto:', error);
+    res.status(500).send('Error al actualizar producto');
+  }
+});
+
+
+// Ruta para eliminar un producto
+router.get('/producto/eliminar/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Eliminar el producto de la base de datos
+    await db.query('DELETE FROM electrodomesticos WHERE idelectrodomestico = ?', [id]);
+
+    // Redirigir a la lista de productos
+    res.redirect('/listar');
+  } catch (error) {
+    console.error('Error al eliminar el producto:', error);
+    res.status(500).send('Error al eliminar producto');
+  }
+});
+
+
+
 module.exports = router;

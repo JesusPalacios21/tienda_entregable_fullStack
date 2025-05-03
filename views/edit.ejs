@@ -1,0 +1,88 @@
+<%- include('partials/header') %>
+
+<main class="container py-5">
+  <h1 class="text-center mb-4">Editar Producto</h1>
+
+  <form action="/producto/actualizar/<%= producto.idelectrodomestico %>" method="POST"enctype="multipart/form-data" class="row g-3">
+    <!-- Nombre -->
+    <div class="col-md-6">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" value="<%= producto.nombre %>" required>
+    </div>
+
+    <!-- Precio -->
+    <div class="col-md-6">
+      <label for="precio" class="form-label">Precio</label>
+      <input type="number" class="form-control" id="precio" name="precio" value="<%= producto.precio %>" required>
+    </div>
+
+    <!-- Color -->
+    <div class="col-md-6">
+      <label for="color" class="form-label">Color</label>
+      <input type="text" class="form-control" id="color" name="color" value="<%= producto.color %>">
+    </div>
+
+    <!-- Alto y Ancho -->
+    <div class="col-md-3">
+      <label for="alto" class="form-label">Alto (cm)</label>
+      <input type="number" class="form-control" id="alto" name="alto" value="<%= producto.alto %>">
+    </div>
+    <div class="col-md-3">
+      <label for="ancho" class="form-label">Ancho (cm)</label>
+      <input type="number" class="form-control" id="ancho" name="ancho" value="<%= producto.ancho %>">
+    </div>
+
+    <!-- Marca y Modelo -->
+    <div class="col-md-6">
+      <label for="marca" class="form-label">Marca</label>
+      <input type="text" class="form-control" id="marca" name="marca" value="<%= producto.marca %>">
+    </div>
+    <div class="col-md-6">
+      <label for="modelo" class="form-label">Modelo</label>
+      <input type="text" class="form-control" id="modelo" name="modelo" value="<%= producto.modelo %>">
+    </div>
+
+    <!-- Descripción -->
+    <div class="col-12">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea class="form-control" id="descripcion" name="descripcion" rows="3"><%= producto.descripcion %></textarea>
+    </div>
+
+    <!-- Stock -->
+    <div class="col-md-6">
+      <label for="stock" class="form-label">Stock</label>
+      <input type="number" class="form-control" id="stock" name="stock" value="<%= producto.stock %>">
+    </div>
+
+    <!-- Categoría -->
+    <div class="col-md-6">
+      <label for="idcategoria" class="form-label">Categoría</label>
+      <select class="form-select" id="idcategoria" name="idcategoria">
+        <% categorias.forEach(cat => { %>
+          <option value="<%= cat.idcategoria %>" <%= cat.idcategoria == producto.idcategoria ? 'selected' : '' %>>
+            <%= cat.nombre %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <!-- Imagen actual -->
+    <div class="col-md-6">
+      <label class="form-label">Imagen actual</label><br>
+      <img src="<%= producto.imagen_url %>" alt="Imagen actual" class="img-thumbnail" style="max-height: 200px;">
+    </div>
+
+    <!-- Subir nueva imagen -->
+    <div class="col-md-6">
+      <label for="imagen" class="form-label">Cambiar imagen (opcional)</label>
+      <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+    </div>
+
+    <!-- Botón -->
+    <div class="col-12 text-end">
+      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </div>
+  </form>
+</main>
+
+<%- include('partials/footer') %>
